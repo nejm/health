@@ -1,0 +1,12 @@
+{
+  "name": "health",
+  "app_id": "ff5c1f6f",
+  "gulpStartupTasks": [
+    "sass",
+    "watch"
+  ],
+  "watchPatterns": [
+    "www/**/*",
+    "!www/lib/**/*"
+  ]
+}

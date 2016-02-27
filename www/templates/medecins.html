@@ -1,0 +1,27 @@
+<ion-view title="Map">
+
+    <ion-nav-bar class="bar-positive">
+      <ion-nav-back-button></ion-nav-back-button>
+    </ion-nav-bar>
+    <ion-content overflow-scroll="true" padding="true" class="has-header">
+          <ion-list>
+            <label class="item item-input item-select">
+              <div class="input-label">
+                Recherche
+              </div>
+              <select ng-change="changeMap()" ng-model="choix">
+                <option>Tous</option>
+                <option>Medecins</option>
+                <option>Pharmacies</option>
+              </select>
+            </label>
+          </ion-list>
+            <div class="spacer" style="width: 100%; height: 5%;"></div>
+
+            <!--<div on-Create="initMap()" id="map" data-tap-disabled="true"></div>-->
+
+            <map on-create="mapCreated(map)"></map>
+
+
+        </ion-content>
+    </ion-view>

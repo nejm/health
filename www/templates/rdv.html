@@ -1,0 +1,37 @@
+<ion-view title="Mes Rendez-Vous">
+
+    <ion-nav-bar class="bar-positive">
+      <ion-nav-back-button></ion-nav-back-button>
+    </ion-nav-bar>
+    <ion-content overflow-scroll="true" padding="true" class="has-header" ng-controller="rdvCtrl">
+
+        <ionic-datepicker ng-hide="hideTime" input-obj="datepickerObject">
+          <button id="date" class="button button-block button-positive">
+          </button>
+        </ionic-datepicker>
+
+        <ionic-timepicker ng-hide="hideTime" input-obj="timePickerObject">
+          <button id="time" class="button button-positive overflowShow">
+            <standard-time-meridian etime='timePickerObject.inputEpochTime'>
+            </standard-time-meridian>
+          </button>
+        </ionic-timepicker>
+
+        <ion-list show-delete="shouldShowDelete"
+          can-swipe="listCanSwipe">
+          <ion-item ng-repeat="event in events"
+          item="item"
+          class="item-remove-animate">
+              {{event.header | date: 'dd/MM/yyyy HH:mm'}}
+              <p>{{event.description}}</p>
+              <ion-delete-button class="ion-minus-circled"
+                                 ng-click="onItemDelete(event)">
+              </ion-delete-button>
+          </ion-item>
+        <ion-list>
+          <nav mfb-menu position="br" effect="zoomin" ng-click="chooseDate()"
+           active-icon="ion-edit" resting-icon="ion-plus-round"
+           toggling-method="click">
+        </nav>
+    </ion-content>
+</ion-view>
