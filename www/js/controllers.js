@@ -29,6 +29,9 @@ angular.module('app.controllers', [])
 
 
   .controller('profileCtrl', function($scope){
+    $scope.$on('$ionicView.afterEnter', function(){
+        document.getElementById("custom-overlay").style.display = "none";
+    });
     $scope.toogle = [{
       text : "Notifications",
       checked : true
@@ -46,14 +49,31 @@ angular.module('app.controllers', [])
   };
 })
 
-.controller('homeCtrl', function($scope){
+.controller('homeCtrl', function($scope, $state, DetailService){
+    $scope.$on('$ionicView.afterEnter', function(){
+        document.getElementById("custom-overlay").style.display = "none";
+    });
+    $scope.Detail = function(){
+      var detail = {};
+      detail.date = new Date();
+      detail.title = "Dossier 1";
+      DetailService.setDetail(detail);
+      $state.go("detail");
+    };
+  })
+
+  .controller('detailCtrl', function($scope, DetailService){
+    $scope.dossier = DetailService.getDetail();
+    console.log($scope.dossier);
+      $scope.$on('$ionicView.afterEnter', function(){
+          document.getElementById("custom-overlay").style.display = "none";
+      });
+    })
+
+.controller('rdvCtrl', function($scope){
   $scope.$on('$ionicView.afterEnter', function(){
       document.getElementById("custom-overlay").style.display = "none";
   });
-  $scope.isExpanded = false;
-})
-
-.controller('rdvCtrl', function($scope){
   $scope.events = [];
   $scope.hideTime = true;
   $scope.date = new Date();
@@ -74,7 +94,7 @@ angular.module('app.controllers', [])
     //disabledDates: disabledDates, //Optional
     //weekDaysList: weekDaysList, //Optional
     //monthList: monthList, //Optional
-    //templateType: 'popup', //Optional
+    templateType: 'modal', //Optional
     showTodayButton: 'true', //Optional
     modalHeaderColor: 'bar-positive', //Optional
     modalFooterColor: 'bar-positive', //Optional
@@ -126,8 +146,11 @@ angular.module('app.controllers', [])
 })
 
 .controller('mapCtrl', function($scope, $ionicLoading, $cordovaGeolocation){
+  $scope.$on('$ionicView.afterEnter', function(){
+      document.getElementById("custom-overlay").style.display = "none";
+  });
   var options = {timeout: 10000, enableHighAccuracy: true};
-
+  var enabled="enabled";
   $scope.mapCreated = function(map) {
     $scope.map = map;
   };
@@ -136,30 +159,38 @@ angular.module('app.controllers', [])
       content: 'Getting current location...',
       showBackdrop: true
     });
+    //cordova.plugins.diagnostic.isLocationEnabled(function(enabled) {
+        if(enabled == "enabled"){
+          $cordovaGeolocation.getCurrentPosition(options).then(function(position){
 
-      $cordovaGeolocation.getCurrentPosition(options).then(function(position){
+            $scope.latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
 
-        $scope.latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+            var mapOptions = {
+              center: $scope.latLng,
+              zoom: 15,
+              mapTypeId: google.maps.MapTypeId.ROADMAP
+            };
 
-        var mapOptions = {
-          center: $scope.latLng,
-          zoom: 15,
-          mapTypeId: google.maps.MapTypeId.ROADMAP
-        };
+            $scope.map.setCenter($scope.latLng);
+            $ionicLoading.hide();
+            // draw the marker
+            google.maps.event.addListenerOnce($scope.map, 'idle', function(){
 
-        $scope.map.setCenter($scope.latLng);
-        $ionicLoading.hide();
-        // draw the marker
-        google.maps.event.addListenerOnce($scope.map, 'idle', function(){
+              var marker = new google.maps.Marker({
+                  map: $scope.map,
+                  animation: google.maps.Animation.DROP,
+                  position: $scope.latLng
+              });
+            });
 
-          var marker = new google.maps.Marker({
-              map: $scope.map,
-              animation: google.maps.Animation.DROP,
-              position: $scope.latLng
-          });
+          }, function(error){
+            alert("Could not get location");
+            $ionicLoading.hide();
         });
-
-      }, function(error){
-        console.log("Could not get location");
-    });
+      }else{
+        alert("GPS is off")
+      }
+    /*}, function(error) {
+        alert("The following error occurred: " + error);
+    });*/
 })

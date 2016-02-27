@@ -67,6 +67,12 @@ angular.module('app.routes', [])
     controller: 'signupCtrl'
   })
 
+  .state('detail', {
+    url: '/detail',
+    templateUrl: 'templates/detail.html',
+    controller: 'detailCtrl'
+  })
+
   if(window.localStorage['auth']) {
   	$urlRouterProvider.otherwise('/side/home');
   }else{

@@ -29,3 +29,15 @@ angular.module('app.services', [])
         }
     }
 })
+
+.service('DetailService', function() {
+    return {
+      data : {},
+      getDetail : function(){
+        return this.data;
+      },
+      setDetail : function (dossier){
+        this.data = dossier;
+      }
+    }
+})

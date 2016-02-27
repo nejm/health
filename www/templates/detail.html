@@ -1,14 +1,9 @@
-<ion-view view-title="{{title}}">
+<ion-view view-title="{{ dossier.title }}">
     <ion-content>
-        <ion-list>
-          <div class="item item-divider">
-            Dossier du {{ dossier.date}}
-          </div>
-          <ion-toggle ng-repeat="item in toogle"
-                    ng-model="item.checked"
-                    ng-checked="item.checked">
-          {{ item.text }}
-        </ion-toggle>
-        </ion-list>
+      <div class="im-wrapper">
+            <h4 class="content padding double-padding-x">
+              Dossier du {{ dossier.date | date: "dd/MM/yyyy" }}
+            </h4>
+        </div>
     </ion-content>
 </ion-view>
