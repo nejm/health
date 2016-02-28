@@ -7,7 +7,7 @@ angular.module('app', [ 'ionic',
                         'ngCordova',
                         'ionic-datepicker',
                         'ionic-timepicker',
-                        'ng-mfb',
+                        'ng-mfb'
                         ])
 
 .run(function($ionicPlatform) {

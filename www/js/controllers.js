@@ -1,6 +1,8 @@
 
 angular.module('app.controllers', [])
 
+
+/************* Login controller ********************/
 .controller('loginCtrl', function($scope, LoginService, $state){
   $scope.data = {};
   $scope.$on('$ionicView.afterEnter', function(){
@@ -27,7 +29,7 @@ angular.module('app.controllers', [])
   }
 })
 
-
+/************* Profile controller ********************/
   .controller('profileCtrl', function($scope){
     $scope.$on('$ionicView.afterEnter', function(){
         document.getElementById("custom-overlay").style.display = "none";
@@ -42,6 +44,8 @@ angular.module('app.controllers', [])
     }]
   })
 
+
+/************* Menu controller ********************/
 .controller('menuCtrl', function($scope, $state){
   $scope.logout = function(){
     window.localStorage.removeItem('auth');
@@ -49,10 +53,15 @@ angular.module('app.controllers', [])
   };
 })
 
+
+/************* Home controller ********************/
 .controller('homeCtrl', function($scope, $state, DetailService){
+
     $scope.$on('$ionicView.afterEnter', function(){
         document.getElementById("custom-overlay").style.display = "none";
     });
+
+
     $scope.Detail = function(){
       var detail = {};
       detail.date = new Date();

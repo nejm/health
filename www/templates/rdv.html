@@ -5,6 +5,7 @@
           </button>
         </ionic-datepicker>
 
+
         <ionic-timepicker ng-hide="hideTime" input-obj="timePickerObject">
           <button id="time" class="button button-positive overflowShow">
             <standard-time-meridian etime='timePickerObject.inputEpochTime'>
@@ -12,18 +13,16 @@
           </button>
         </ionic-timepicker>
 
-        <ion-list show-delete="shouldShowDelete"
-          can-swipe="listCanSwipe">
+        <ion-list>
           <ion-item ng-repeat="event in events"
           item="item"
           class="item-remove-animate">
               {{event.header | date: 'dd/MM/yyyy HH:mm'}}
               <p>{{event.description}}</p>
-              <ion-delete-button class="ion-minus-circled"
-                                 ng-click="onItemDelete(event)">
-              </ion-delete-button>
+
+              <ion-option-button class = "button-assertive">Delete</ion-option-button>
           </ion-item>
-        <ion-list>
+        </ion-list>
           <nav mfb-menu position="br" effect="zoomin" ng-click="chooseDate()"
            active-icon="ion-plus-round" resting-icon="ion-plus-round"
            toggling-method="click">
