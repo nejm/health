@@ -90,6 +90,10 @@ angular.module('app.controllers', [])
   $scope.chooseDate = function() {
     angular.element(document.querySelector('#date').click());
   };
+
+  var d = new Date();
+  d.setDate(d.getDate() - 1);
+
   $scope.datepickerObject = {
     titleLabel: 'Choisissez la date',  //Optional
     todayLabel: 'Aujourd\'hui',  //Optional
@@ -107,7 +111,7 @@ angular.module('app.controllers', [])
     showTodayButton: 'true', //Optional
     modalHeaderColor: 'bar-positive', //Optional
     modalFooterColor: 'bar-positive', //Optional
-    from: new Date(), //Optional
+    from: d, //Optional
     to: new Date(2018, 8, 25),  //Optional
     callback: function (val) {  //Mandatory
       angular.element(document.querySelector('#time').click());
@@ -193,11 +197,11 @@ angular.module('app.controllers', [])
             });
 
           }, function(error){
-            alert("Could not get location");
+            alert("problème de connexion");
             $ionicLoading.hide();
         });
       }else{
-        alert("GPS is off")
+        alert("Please turn on your GPS");
       }
     /*}, function(error) {
         alert("The following error occurred: " + error);

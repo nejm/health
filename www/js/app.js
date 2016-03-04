@@ -21,11 +21,26 @@ angular.module('app', [ 'ionic',
             // org.apache.cordova.statusbar required
             StatusBar.styleDefault();
         }
-        var push = new Ionic.Push({
-          "debug": true
-        });
-        push.register(function(token) {
-         console.log("Device token:",token.token);
-       });
+        // check if any connection
+        if(window.Connection) {
+                if(navigator.connection.type == Connection.NONE) {
+                    $ionicPopup.confirm({
+                        title: "Internet Disconnected",
+                        content: "The internet is disconnected on your device."
+                    })
+                    .then(function(result) {
+                        if(!result) {
+                            ionic.Platform.exitApp();
+                        }
+                    });
+                }else{
+                  var push = new Ionic.Push({
+                    "debug": true
+                  });
+                  push.register(function(token) {
+                   console.log("Device token:",token.token);
+                 });
+                }
+            }
     });
 });
