@@ -16,7 +16,7 @@ angular.module('app.controllers', [])
       $state.go('menu.home');
     }
 
-      /*********************************************/
+/*********************************************/
     LoginService.loginUser($scope.data.cin, $scope.data.password).success(function(data) {
         window.localStorage['auth'] = $scope.data.cin;
         $state.go('menu.home');
@@ -44,7 +44,6 @@ angular.module('app.controllers', [])
     }]
   })
 
-
 /************* Menu controller ********************/
 .controller('menuCtrl', function($scope, $state){
   $scope.logout = function(){
@@ -52,15 +51,70 @@ angular.module('app.controllers', [])
       $state.go('login');
   };
 })
+/*************** Medical controller ********************/
+.controller('medicalCtrl', function($scope, $state, GetDoctorsService){
+
+  $scope.datetimeValue = new Date();
+
+  $scope.rolefilter = "medecin" ;
+  $scope.$on('$ionicView.afterEnter', function(){
+      document.getElementById("custom-overlay").style.display = "none";
+    });
+
+    dataDoctors = [{
+      "name" : "Ben Ammar Mohamed",
+      "location" : "20 rue bayrem 2010 aryana",
+      "role" : "medecin",
+      "image" : "medecin.jpg"
+    },
+    {
+      "name" : "Labouz Souheib",
+      "location" : "20 rue ghazala 2020 aryana",
+      "role" : "medecin",
+      "image" : "medecin.jpg"
+    }];
+    dataPharmacie = [{
+      "name" : "Pharmacie Bsayes",
+      "location" : "5 rue argentine 1200 Tunis",
+      "role" : "pharmacie",
+      "image" : "pharmacy.png"
+    }];
+
+    $scope.dataC = [];
+
+    $scope.test = function(data){
+      console.log(data.toLowerCase() == "medecin");
+      $scope.$apply();
+    }
+
+    $scope.filterRole = function(role){
+      if(role.toLowerCase() == "medecin")
+        $scope.dataC = dataDoctors;
+      else
+        $scope.dataC = dataPharmacie;
+    };
+
+      GetDoctorsService.getDoctors().success(function(data){
+        console.log(data);
+      });
+
+    $scope.SurLaMap = function(){
+      $state.go('menu.map');
+    };
+
+    $scope.rendezVous = function(){
+
+    };
+
+})
 
 
 /************* Home controller ********************/
-.controller('homeCtrl', function($scope, $state, DetailService){
+.controller('homeCtrl', function($scope, $state,$http , DetailService){
 
     $scope.$on('$ionicView.afterEnter', function(){
         document.getElementById("custom-overlay").style.display = "none";
     });
-
 
     $scope.Detail = function(){
       var detail = {};
@@ -70,7 +124,7 @@ angular.module('app.controllers', [])
       $state.go("detail");
     };
   })
-
+/************* Detail controller ***************************/
   .controller('detailCtrl', function($scope, DetailService){
     $scope.dossier = DetailService.getDetail();
     console.log($scope.dossier);
@@ -157,7 +211,20 @@ angular.module('app.controllers', [])
     }
   };
 })
+/*********************** listRdv controller *******************************/
+.controller('listRdvCtrl', function($scope){
 
+  $scope.$on('$ionicView.afterEnter', function(){
+      document.getElementById("custom-overlay").style.display = "none";
+  });
+
+  $scope.events = [{
+    "date" : "20/09/2016",
+    "description" : "Rendez-Vous avec Ophtalmologie"
+  }];
+
+})
+/********************** Map controller ******************************/
 .controller('mapCtrl', function($scope, $ionicLoading, $cordovaGeolocation){
   $scope.$on('$ionicView.afterEnter', function(){
       document.getElementById("custom-overlay").style.display = "none";

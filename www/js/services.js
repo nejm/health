@@ -30,6 +30,32 @@ angular.module('app.services', [])
     }
 })
 
+.service('GetDoctorsService', function($q, $http) {
+    return {
+        getDoctors: function() {
+            var deferred = $q.defer();
+            var promise = deferred.promise;
+
+            /************************************/
+            var link = "http://cnamapplication.alwaysdata.net/getAllDoctors.php";
+            $http.get(link).then(function (res){
+              var response = res.data;
+              deferred.resolve(response);
+            });
+            /*************************************/
+            promise.success = function(fn) {
+                promise.then(fn);
+                return promise;
+            }
+            promise.error = function(fn) {
+                promise.then(null, fn);
+                return promise;
+            }
+            return promise;
+        }
+    }
+})
+
 .service('DetailService', function() {
     return {
       data : {},

@@ -1,0 +1,17 @@
+<ion-view title="Mes Rendez-Vous">
+    <ion-content overflow-scroll="true" padding="true" class="has-header">
+
+      <div class="card list" ng-repeat="event in events" item="item">
+          <div class="item item-text-wrap">
+            {{event.description}}
+           
+          </div>
+         <div class="item item-divider">
+           <p class="">
+             <i class="icon ion-clock"></i> {{event.date | date: 'dd/MM/yyyy HH:mm'}}
+           </p>
+         </div>
+      </div>
+
+    </ion-content>
+</ion-view>

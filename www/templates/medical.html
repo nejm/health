@@ -1,0 +1,25 @@
+<ion-view title="Medical">
+  <ion-content overflow-scroll="true" padding="true" class="has-header">
+
+    <label class="item item-input item-select">
+      <div class="input-label">
+          Choix
+      </div>
+      <select ng-model="rolefilter" ng-change="test(rolefilter)">
+          <option ng-selected="true">Medecin</option>
+          <option>Pharmacie</option>
+      </select>
+    </label>
+    <div class="spacer" style="height: 40px;"></div>
+    <ion-list>
+        <ion-item ng-repeat="data in dataC | filter:filterRole(rolefilter)" class="item item-thumbnail-left">
+          <img src="img/{{data.image}}" />
+          <h2>{{data.name}}</h2>
+          <p>{{data.location}}</p>
+          <ion-option-button class="button-positive"  ng-click="SurLaMap()">Map</ion-option-button>
+          <ion-option-button ng-if="data.role == 'medecin'" ng-click="rendezVous()" class="button-assertive"
+          ion-datetime-picker ng-model="datetimeValue">RDV</ion-option-button>
+        </ion-item>
+    </ion-list>
+  </ion-content>
+</ion-view>

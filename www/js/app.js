@@ -5,9 +5,8 @@ angular.module('app', [ 'ionic',
                         'app.directives',
                         'app.services',
                         'ngCordova',
-                        'ionic-datepicker',
-                        'ionic-timepicker',
-                        'ng-mfb'
+                        'ng-mfb',
+                        'ion-datetime-picker'
                         ])
 
 .run(function($ionicPlatform) {

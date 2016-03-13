@@ -8,7 +8,7 @@ angular.module('app.routes', [])
   // Each state's controller can be found in controllers.js
   $stateProvider
 
-      .state('menu.home', {
+    .state('menu.home', {
     url: '/home',
     views: {
       'side': {
@@ -18,12 +18,22 @@ angular.module('app.routes', [])
     }
   })
 
-  .state('menu.medecins', {
-    url: '/medecins',
+  .state('menu.medical', {
+    url: '/medical',
     views: {
       'side': {
-        templateUrl: 'templates/medecins.html',
-        controller: 'mapCtrl'
+        templateUrl: 'templates/medical.html',
+        controller: 'medicalCtrl'
+      }
+    }
+  })
+
+  .state('menu.listrdv', {
+    url: '/listRdv',
+    views: {
+      'side': {
+        templateUrl: 'templates/listrdv.html',
+        controller: 'listRdvCtrl'
       }
     }
   })
@@ -71,6 +81,16 @@ angular.module('app.routes', [])
     url: '/detail',
     templateUrl: 'templates/detail.html',
     controller: 'detailCtrl'
+  })
+
+  .state('menu.map', {
+    url: '/map',
+    views: {
+      'side' : {
+        templateUrl: 'templates/map.html',
+        controller: 'mapCtrl'
+      }
+    }
   })
 
   if(window.localStorage['auth']) {
