@@ -3,14 +3,15 @@ angular.module('app.controllers', [])
 
 
 /************* Login controller ********************/
-.controller('loginCtrl', function($scope, LoginService, $state){
+.controller('loginCtrl', function($scope, LoginService, $state,$ionicPopup){
   $scope.data = {};
   $scope.$on('$ionicView.afterEnter', function(){
       document.getElementById("custom-overlay").style.display = "none";
   });
 
   $scope.login = function() {
-    /* to delete */
+    /*LoginService.loginUser($scope.data.cin,$scope.data.password)
+    /* to delete
     if($scope.data.password === undefined){
       window.localStorage['auth'] = $scope.data.cin;
       $state.go('menu.home');
@@ -18,7 +19,8 @@ angular.module('app.controllers', [])
 
 /*********************************************/
     LoginService.loginUser($scope.data.cin, $scope.data.password).success(function(data) {
-        window.localStorage['auth'] = $scope.data.cin;
+        window.localStorage['auth'] = data.idUser;
+        console.log(data);
         $state.go('menu.home');
       }).error(function(data) {
           var alertPopup = $ionicPopup.alert({
@@ -30,18 +32,23 @@ angular.module('app.controllers', [])
 })
 
 /************* Profile controller ********************/
-  .controller('profileCtrl', function($scope){
+  .controller('profileCtrl', function($scope, InfoService){
     $scope.$on('$ionicView.afterEnter', function(){
         document.getElementById("custom-overlay").style.display = "none";
     });
-    $scope.toogle = [{
+    /*$scope.toogle = [{
       text : "Notifications",
       checked : true
     },
     {
       text : "Connexion auto",
       checked : true
-    }]
+    }]*/
+    var id = window.localStorage['auth'];
+    InfoService.getUserDetail(id).success(function(data){
+      $scope.info = data;
+    });
+
   })
 
 /************* Menu controller ********************/
@@ -52,7 +59,7 @@ angular.module('app.controllers', [])
   };
 })
 /*************** Medical controller ********************/
-.controller('medicalCtrl', function($scope, $state, GetDoctorsService){
+.controller('medicalCtrl', function($scope, $state, medicalService){
 
   $scope.datetimeValue = new Date();
 
@@ -60,45 +67,40 @@ angular.module('app.controllers', [])
   $scope.$on('$ionicView.afterEnter', function(){
       document.getElementById("custom-overlay").style.display = "none";
     });
+    var dataDoctors = [];
+    var dataPharmacie = [];
 
-    dataDoctors = [{
-      "name" : "Ben Ammar Mohamed",
-      "location" : "20 rue bayrem 2010 aryana",
-      "role" : "medecin",
-      "image" : "medecin.jpg"
-    },
-    {
-      "name" : "Labouz Souheib",
-      "location" : "20 rue ghazala 2020 aryana",
-      "role" : "medecin",
-      "image" : "medecin.jpg"
-    }];
-    dataPharmacie = [{
-      "name" : "Pharmacie Bsayes",
-      "location" : "5 rue argentine 1200 Tunis",
-      "role" : "pharmacie",
-      "image" : "pharmacy.png"
-    }];
+    $scope.test = function(){
 
-    $scope.dataC = [];
-
-    $scope.test = function(data){
-      console.log(data.toLowerCase() == "medecin");
-      $scope.$apply();
     }
 
+    medicalService.getDoctors().success(function(data){
+      dataDoctors = data;
+    });
+
+    medicalService.getFarmacies().success(function(data){
+      dataPharmacie = data;
+    });
+
+    $scope.dataC = [];
+    $scope.image;
+    $scope.rdv;
+
     $scope.filterRole = function(role){
-      if(role.toLowerCase() == "medecin")
+      if(role.toLowerCase() == "medecin"){
+        $scope.image = "medecin.jpg";
         $scope.dataC = dataDoctors;
-      else
+        $scope.rdv = true;
+      }
+      else{
+        $scope.rdv = false;
+        $scope.image = "pharmacy.png";
         $scope.dataC = dataPharmacie;
+      }
+
     };
 
-      GetDoctorsService.getDoctors().success(function(data){
-        console.log(data);
-      });
-
-    $scope.SurLaMap = function(){
+    $scope.surLaMap = function(){
       $state.go('menu.map');
     };
 
@@ -110,28 +112,49 @@ angular.module('app.controllers', [])
 
 
 /************* Home controller ********************/
-.controller('homeCtrl', function($scope, $state,$http , DetailService){
-
+.controller('homeCtrl', function($scope, $state, FeuilleService){
+    $scope.feuille = {};
     $scope.$on('$ionicView.afterEnter', function(){
         document.getElementById("custom-overlay").style.display = "none";
     });
 
-    $scope.Detail = function(){
-      var detail = {};
-      detail.date = new Date();
-      detail.title = "Dossier 1";
-      DetailService.setDetail(detail);
-      $state.go("detail");
-    };
-  })
-/************* Detail controller ***************************/
-  .controller('detailCtrl', function($scope, DetailService){
-    $scope.dossier = DetailService.getDetail();
-    console.log($scope.dossier);
-      $scope.$on('$ionicView.afterEnter', function(){
-          document.getElementById("custom-overlay").style.display = "none";
-      });
+    FeuilleService.getFeuille("2016")
+      .success(function(data){
+        $scope.feuille.id= data.idFeuilleAssurance;
+        $scope.feuille.rdv = data.idRDV;
+        $scope.feuille.pharmacie = data.idPharmacie;
+        $scope.feuille.assureur = data.idAssureur;
+        $scope.feuille.prix = data.prixConsultation;
+        $scope.feuille.nomMaladie = data.nomMaladie;
+        $scope.feuille.idDocteur = data.idDocteur;
+        console.log(" Docteur : "+ data);
+        $scope.feuille.description = data.descriptionMaladie;
+        switch(data.etape) {
+        case 1:
+            $scope.feuille.etape = "Medecin";
+            break;
+        case 2:
+            $scope.feuille.etape = "Pharmacie";
+            break;
+        default:
+            $scope.feuille.etape = "CNAM";
+          }
+
+        var id = $scope.feuille.idDocteur;
+
+        FeuilleService.getDocteurDetail(id).success(function(dt){
+          console.log("Docteur assurence : "  , dt);
+          $scope.feuille.docteur = dt.nom + " " + dt.prenom ;
+          $scope.feuille.specialite = dt.salt;
+        });
+
     })
+    .error(function(){
+      console.log("Erreur Feuille Assurence");
+    });
+
+
+  })
 
 .controller('rdvCtrl', function($scope){
   $scope.$on('$ionicView.afterEnter', function(){
@@ -212,16 +235,26 @@ angular.module('app.controllers', [])
   };
 })
 /*********************** listRdv controller *******************************/
-.controller('listRdvCtrl', function($scope){
+.controller('listRdvCtrl', function($scope, RdvService){
 
   $scope.$on('$ionicView.afterEnter', function(){
       document.getElementById("custom-overlay").style.display = "none";
   });
 
-  $scope.events = [{
+  $scope.events = [];
+
+  RdvService.rendezVous("2016").success(function(data){
+
+    $scope.events = data;
+    console.log(data);
+  })
+  .error(function(){
+    console.log("Erreur Rendez-Vous");
+  });
+/*  $scope.events = [{
     "date" : "20/09/2016",
     "description" : "Rendez-Vous avec Ophtalmologie"
-  }];
+  }];*/
 
 })
 /********************** Map controller ******************************/

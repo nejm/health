@@ -3,12 +3,12 @@
 
       <div class="card list" ng-repeat="event in events" item="item">
           <div class="item item-text-wrap">
-            {{event.description}}
-           
+            ID : {{event.idRDV}}
+
           </div>
          <div class="item item-divider">
            <p class="">
-             <i class="icon ion-clock"></i> {{event.date | date: 'dd/MM/yyyy HH:mm'}}
+             <i class="icon ion-clock"></i> {{event.jour+"/"+event.mois+"/"+event.annee+" "+event.heure}}
            </p>
          </div>
       </div>

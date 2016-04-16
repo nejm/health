@@ -2,13 +2,12 @@
     <ion-content ng-class="{expanded:$scope.isExpanded}">
         <ion-list>
           <div class="item item-divider">
-            Personalisation
+            Information Personnel
           </div>
-          <ion-toggle ng-repeat="item in toogle"
-                    ng-model="item.checked"
-                    ng-checked="item.checked">
-          {{ item.text }}
-        </ion-toggle>
+          <ion-item>Nom & Prénom : {{info.nom + " " + info.prenom}}</ion-item>
+          <ion-item>CIN : {{info.cin}}</ion-item>
+          <ion-item>Tel : {{info.tel}}</ion-item>
+          <ion-item>Adresse : {{info.rue + " " + info.codePostal + " " + info.ville}}</ion-item>
         </ion-list>
     </ion-content>
 </ion-view>

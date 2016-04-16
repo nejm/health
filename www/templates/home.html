@@ -1,27 +1,31 @@
 <ion-view view-title="Home">
     <ion-content overflow-scroll="true" padding="true">
-      <div class="im-wrapper">
-            <h4 class="content padding double-padding-x">Mon Dossiers</h4>
-        </div>
-        <!--<ion-list>
-            <ion-item nav-clear menu-close class="item-icon-right" ng-click="blinds();">Dossier 1
-              <i class="icon ion-chatbubble muted"></i>
-            </ion-item>
-            <ion-item nav-clear menu-close ng-click="blinds();">Dossier 2</ion-item>
-            <ion-item nav-clear menu-close ng-click="blinds();">Dossier 3</ion-item>
-        </ion-list>-->
-
-        <div class="card list">
-          <div class="item item-text-wrap">
-            En CNAM
-            <span class="badge badge-assertive text-right">Etat</span>
+        <div class="list">
+          <div class="item">
+            <h2>ID : {{feuille.id}}</h2>
+          </div>
+          <div class="item item-thumbnail-left">
+            <img src="img/medecin.jpg" />
+            <h2>Doteur : {{feuille.docteur}}</h2>
+            <p><h5>Consultation : {{feuille.prix}} DT</h4><p>
           </div>
 
-         <div class="item item-divider">
-           <p class="">
-             <i class="icon ion-clock"></i> 22/02/2015
-           </p>
-         </div>
-      </div>
+          <div class="item">
+            <h2>Pharmacie : {{(feuille.pharmacie == null)?"Non encore traité":feuille.pharmacie}}</h2>
+            <div ng-if="feuille.pharmacie != null">
+              <p>Quelque chose</p>
+            </div>
+          </div>
+          <div class="item item-body">
+            <h2>CNAM : {{(feuille.assureur == null)?"Non encore traité":feuille.assureur}}</h2>
+            <div ng-if="feuille.assureur != null">
+              <p>Quelque chose</p>
+            </div>
+          </div>
+          <div ng-if="feuille.etape != CNAM" class="item item-positive text-center">Dossier en cours de traitement</div>
+          <div ng-if="feuille.etape == CNAM" class="item item-assertive text-center">Traité</div>
+        </div>
+
+
     </ion-content>
 </ion-view>
