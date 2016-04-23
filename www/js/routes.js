@@ -79,6 +79,9 @@ angular.module('app.routes', [])
 
   .state('detail', {
     url: '/detail',
+    params :{
+      obj: null
+    },
     templateUrl: 'templates/detail.html',
     controller: 'detailCtrl'
   })

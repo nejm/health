@@ -81,7 +81,6 @@ angular.module('app.services', [])
             }
             return promise;
         }
-
     }
 })
 
@@ -94,7 +93,7 @@ angular.module('app.services', [])
           var link = "http://cnamapplication.alwaysdata.net/getAllInsuranceSheetsForPatient.php?idUser="
                       +id;
           $http.get(link).then(function (res){
-            var response = res.data[0];
+            var response = res.data;
             if (response != null){
               deferred.resolve(response);
             }
@@ -136,7 +135,6 @@ angular.module('app.services', [])
           return promise;
       }
   }
-
 })
 
 .service('RdvService', function($q, $http) {
@@ -147,6 +145,7 @@ angular.module('app.services', [])
 
             // getting the remote informations
             var link = "http://cnamapplication.alwaysdata.net/getAllAppointmentsForPatient.php?idPatient="+id;
+            console.log(link);
             $http.get(link).then(function (res){
               var response = res.data;
               if (response != null){
@@ -165,7 +164,33 @@ angular.module('app.services', [])
                 return promise;
             }
             return promise;
-        }
+        },
+        rdvDetail: function(id){
+          var deferred = $q.defer();
+          var promise = deferred.promise;
+
+          // getting the remote informations
+          var link = "http://cnamapplication.alwaysdata.net/getAppointmentById.php?idRDV="+id;
+          console.log(link);
+          $http.get(link).then(function (res){
+            var response = res.data;
+            if (response != null){
+              deferred.resolve(response);
+            }else{
+              deferred.reject();
+            }
+          });
+          // manage the return on success and failure
+          promise.success = function(fn) {
+              promise.then(fn);
+              return promise;
+          }
+          promise.error = function(fn) {
+              promise.then(null, fn);
+              return promise;
+          }
+          return promise;
+      }
     }
 })
 
@@ -175,9 +200,9 @@ angular.module('app.services', [])
 
       var deferred = $q.defer();
       var promise = deferred.promise;
-
       var link = "http://cnamapplication.alwaysdata.net/getUserById.php?idUser="
                   +id;
+      console.log(link);
       $http.get(link).then(function (res){
         var response = res.data[0];
         if (res.data != null)
@@ -194,34 +219,6 @@ angular.module('app.services', [])
           return promise;
       }
       return promise;
-  }
-}
-
-})
-
-
-/*.service('DetailService', function($q, $http) {
-    return {
-      var deferred = $q.defer();
-      var promise = deferred.promise;
-      var link = "";
-
-      $http.get(link).then(function(res){
-        // have to change
-        var response = res.data;
-        if(response != null){
-          // do what you have to do
-          deferred.resolve();
-        }else{
-          deferred.reject();
-        }
-      });
-      data : {},
-      getDetail : function(){
-        return this.data;
-      },
-      setDetail : function (dossier){
-        this.data = dossier;
-      }
     }
-})*/
+  }
+})

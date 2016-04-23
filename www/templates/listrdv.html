@@ -1,17 +1,15 @@
 <ion-view title="Mes Rendez-Vous">
     <ion-content overflow-scroll="true" padding="true" class="has-header">
 
-      <div class="card list" ng-repeat="event in events" item="item">
+      <div class="card list" ng-repeat="event in events track by $index" item="item">
           <div class="item item-text-wrap">
-            ID : {{event.idRDV}}
-
+            Rendez-Vous avec le docteur {{event.doctor}}
           </div>
          <div class="item item-divider">
            <p class="">
-             <i class="icon ion-clock"></i> {{event.jour+"/"+event.mois+"/"+event.annee+" "+event.heure}}
+             <i class="icon ion-clock"></i> {{event.date}}
            </p>
          </div>
       </div>
-
     </ion-content>
 </ion-view>

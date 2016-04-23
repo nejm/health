@@ -1,6 +1,15 @@
 <ion-view view-title="Home">
     <ion-content overflow-scroll="true" padding="true">
-        <div class="list">
+      <div class="list card">
+        <a
+         class="item item-icon-left"
+         ng-repeat="item in listFeuilles"
+         ng-click="loadDetail(item)">
+          <i class="icon ion-card"></i>
+            {{item.idFeuilleAssurance + " : " + item.etape}}
+        </a>
+      </div>
+        <!--<div class="list">
           <div class="item">
             <h2>ID : {{feuille.id}}</h2>
           </div>
@@ -24,7 +33,7 @@
           </div>
           <div ng-if="feuille.etape != CNAM" class="item item-positive text-center">Dossier en cours de traitement</div>
           <div ng-if="feuille.etape == CNAM" class="item item-assertive text-center">Traité</div>
-        </div>
+        </div>-->
 
 
     </ion-content>
